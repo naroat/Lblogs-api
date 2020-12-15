@@ -10,10 +10,10 @@
     "require": {
         "php": "^7.2",
         "fideloper/proxy": "^4.0",
-        "laravel/framework": "^6.18.35",
+        "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
         "lcobucci/jwt": "^3.3",
-        "taoran/laravel-util": "^1.2"
+        "laravel/telescope": "^2.1"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
