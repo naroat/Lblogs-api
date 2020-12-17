@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Exceptions\ApiException;
+
 use App\Http\Controllers\Controller;
+use App\Packages\Exception\src\ApiException;
 use Illuminate\Http\Request;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
@@ -14,6 +15,8 @@ class TestController extends Controller
     //
     public function index()
     {
+        throw new ApiException(222);
+        dd(123123);
         $origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '';
         dd($origin);
         JwtAuth::set('admin_info', [
