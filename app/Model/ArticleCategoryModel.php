@@ -4,10 +4,9 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AdminUserModel extends Model
+class ArticleCategoryModel extends Model
 {
-    protected $table = 'admin_user';
+    protected $table = 'article_category';
 
     protected $dateFormat = 'U';
-
 }
