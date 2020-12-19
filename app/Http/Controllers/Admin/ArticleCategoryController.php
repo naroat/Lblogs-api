@@ -2,29 +2,31 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
+use App\Services\ArticleCategoryService;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class ArticleCategoryController extends Controller
 {
+    protected $articleCategoryService;
+
+    public function __construct(ArticleCategoryService $articleCategoryService)
+    {
+        $this->articleCategoryService = $articleCategoryService;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $list = $this->articleCategoryService->getList();
 
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response_json($list);
     }
 
     /**
@@ -35,7 +37,12 @@ class ArticleCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $param = $this->storeVerify($request);
+
+        $this->articleCategoryService->add($param);
+
+        return response_json();
+
     }
 
     /**
@@ -46,18 +53,8 @@ class ArticleCategoryController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $data = $this->articleCategoryService->getOne($id);
+        return response_json($data);
     }
 
     /**
@@ -69,7 +66,11 @@ class ArticleCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $param = $this->storeVerify($request);
+
+        $this->articleCategoryService->update($param, $id);
+
+        return response_json();
     }
 
     /**
@@ -80,6 +81,31 @@ class ArticleCategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->articleCategoryService->delete($id);
+    }
+
+    //验证
+    public function storeVerify($request)
+    {
+        $param['name'] = $request->get('name');
+        $param['parent_id'] = $request->get('parent_id');
+
+        $rule = [
+            'name' => 'required|max:20',
+        ];
+
+        $message = [
+            'name.required' => '请填写分类名称！',
+            'name.max' => '分类名称长度超过20'
+        ];
+
+        $validator = Validator::make($param, $rule, $message);
+
+        //验证失败
+        if ($validator->fails()) {
+            throw new ApiException($validator->errors()->first());
+        }
+
+        return $param;
     }
 }
