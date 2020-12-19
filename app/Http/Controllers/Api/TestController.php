@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Controllers\Controller;
+use App\Packages\Core\src\Traits\Response;
 use App\Packages\Exception\src\ApiException;
+use App\Repositorys\AdminUserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
@@ -12,9 +14,15 @@ use Taoran\Laravel\Jwt\JwtAuth;
 
 class TestController extends Controller
 {
+    use Response;
     //
     public function index()
     {
+        return $this->responseJson([1 => 1]);
+
+        $re = new AdminUserRepository();
+        $res = $re->getAdminUserOne(['id' => 1]);
+        dd($res);
         throw new ApiException(222);
         dd(123123);
         $origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '';

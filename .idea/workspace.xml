@@ -2,10 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="50d7313a-ed5f-4e8b-93ae-f0261c86b3f6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/Packages/Core/src/Repository.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Packages/Core/src/Traits/CallbackTrait.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Packages/Core/src/Traits/Response.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Services/AdminUserService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exceptions/Handler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Packages/Exception/src/ApiException.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Packages/Exception/src/ApiException.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Packages/Exception/src/ExceptionHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Packages/Exception/src/Handler.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/LoginController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/TestController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/TestController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Logic/Admin/LoginLogic.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/LoginService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Packages/Core/src/Helper/Core.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Packages/Core/src/Helper/Core.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Packages/Core/src/Repository/Repository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Packages/Core/src/Service/Service.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repositorys/AdminUserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositorys/AdminUserRepository.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -129,22 +137,23 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/Services" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/Packages/Core/src" />
-      <recent name="$PROJECT_DIR$/app/Packages/Core" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/Services" />
+      <recent name="$PROJECT_DIR$/app/Packages/Core/src/Traits" />
       <recent name="$PROJECT_DIR$/app/Packages/Exception/src" />
       <recent name="$PROJECT_DIR$/app/Packages/Jwt/src" />
       <recent name="$PROJECT_DIR$/app/Packages/Upload/src" />
-      <recent name="$PROJECT_DIR$/app/Packages/Core/Helper" />
-      <recent name="$PROJECT_DIR$/app/Packages/Console/src" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/Packages/Core/src/Traits" />
+      <recent name="$PROJECT_DIR$/app/Packages/Core/src" />
+      <recent name="$PROJECT_DIR$/app/Packages/Core" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -188,7 +197,8 @@
       <workItem from="1607946951076" duration="1468000" />
       <workItem from="1607949311052" duration="367000" />
       <workItem from="1608028931257" duration="5241000" />
-      <workItem from="1608207947246" duration="2190000" />
+      <workItem from="1608207947246" duration="2292000" />
+      <workItem from="1608359945065" duration="9775000" />
     </task>
     <servers />
   </component>

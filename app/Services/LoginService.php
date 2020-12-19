@@ -1,11 +1,11 @@
 <?php
-namespace App\Logic\Admin;
+namespace App\Services;
 
 use App\Exceptions\ApiException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
-class LoginLogic
+class LoginService
 {
     public static function login($data)
     {

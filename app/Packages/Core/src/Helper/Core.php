@@ -1,16 +1,4 @@
 <?php
-if (!function_exists('response_json')) {
-    function response_json($data = array(), $list = array(), $code = 200)
-    {
-        $data = [
-            'errno' => 0,       //
-            'errmsg' => 'ok',
-            'data' => empty($data) ? null : $data,
-            'runtime' => ''
-        ];
-        return response()->json($data, $code, $list, JSON_UNESCAPED_UNICODE);
-    }
-}
 if (!function_exists('verify')) {
     function verify($request, $data)
     {
