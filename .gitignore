@@ -13,3 +13,6 @@ yarn-error.log
 /.idea/workspace.xml
 /.idea/api.iml
 /.idea/php.xml
+/storage/temp
+/public/temp
+/storage/multiupload

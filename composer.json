@@ -9,11 +9,13 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "aliyuncs/oss-sdk-php": "^2.4",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.2",
+        "laravel/telescope": "^2.1",
         "laravel/tinker": "^2.0",
         "lcobucci/jwt": "^3.3",
-        "laravel/telescope": "^2.1"
+        "taoran/laravel-util": "^1.2"
     },
     "require-dev": {
         "facade/ignition": "^1.4",

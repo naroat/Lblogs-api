@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Taoran\Laravel\Exception\ApiException;
+use Taoran\Laravel\Traits\Response;
 
 class LoginController extends Controller
 {
+    use Response;
+
     //登录
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->post(), [
             'account' => 'required',
             'password' => 'required'
         ]);

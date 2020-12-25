@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 Route::any('test', 'Api\TestController@index');
+Route::post('upload', 'Api\UploadController@upload');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

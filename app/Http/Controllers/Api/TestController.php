@@ -4,21 +4,35 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Controllers\Controller;
-use App\Packages\Core\src\Traits\Response;
-use App\Packages\Exception\src\ApiException;
 use App\Repositorys\AdminUserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
+use Taoran\Laravel\Exception\ApiException;
 use Taoran\Laravel\Jwt\JwtAuth;
+use Taoran\Laravel\Upload\Upload;
 
 class TestController extends Controller
 {
-    use Response;
     //
-    public function index()
+    public function index(Request $request)
     {
-        return $this->responseJson([1 => 1]);
+        $filename = 'f8d267922af3cccc63277557e036ea49.jpg';
+        return response()->download(storage_path('uploads') . '/' . $filename, $filename);
+
+        $res = (new Upload())->download('f8d267922af3cccc63277557e036ea49.jpg');
+        dd($res);
+        $param = verify('GET', [
+            'username' => 'required'
+        ], [
+            'username.required' => '请填写用户名称'
+        ]);
+        dd($param);
+        return response_json($param);
+        throw new ApiException();
+        exit;
+        dd(123123);
+
 
         $re = new AdminUserRepository();
         $res = $re->getAdminUserOne(['id' => 1]);
