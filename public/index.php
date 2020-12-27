@@ -1,5 +1,5 @@
 <?php
-
+phpinfo();
 define('LARAVEL_START', microtime(true));
 
 /**
