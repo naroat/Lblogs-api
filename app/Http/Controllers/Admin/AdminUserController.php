@@ -14,8 +14,9 @@ class AdminUserController extends Controller
      */
     public function index(Request $request)
     {
-        verify('GET', [
-            ''
+        return response_json([
+            'account' => 'admin',
+            'roles' => [1]
         ]);
     }
 

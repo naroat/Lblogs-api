@@ -3,12 +3,12 @@
 
 namespace App\Repositorys;
 
-
-use App\Exceptions\ApiException;
 use App\Model\ArticleCategoryModel;
 use Illuminate\Support\Facades\DB;
+use Taoran\Laravel\Exception\ApiException;
+use Taoran\Laravel\Repository;
 
-class ArticleCategoryRepository extends Repository
+class ArticleCategoryRepository
 {
     protected $articleCategory;
 
@@ -66,7 +66,7 @@ class ArticleCategoryRepository extends Repository
     public function update($model, $param)
     {
         set_save_data($model, $param);
-        $res = $this->articleCategory->save();
+        $res = $model->save();
         if (!$res) {
             DB::rollBack();
             throw new ApiException('数据库错误！');
@@ -83,13 +83,13 @@ class ArticleCategoryRepository extends Repository
      */
     public function delete($id)
     {
-        $info = $this->articleCategory->getOneById($id);
+        $info = $this->articleCategory->where('is_on', 1)->find($id);
         if (!$info) {
             DB::rollBack();
             throw new ApiException('数据不存在！');
         }
 
-        $info->is_on = 1;
+        $info->is_on = 0;
         $res = $info->save();
         if (!$res) {
             DB::rollBack();

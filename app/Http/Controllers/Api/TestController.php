@@ -17,6 +17,8 @@ class TestController extends Controller
     //
     public function index(Request $request)
     {
+        $p = '123123';
+        dd(encrypt_password($p, 'kPu9r'));
         $filename = 'f8d267922af3cccc63277557e036ea49.jpg';
         return response()->download(storage_path('uploads') . '/' . $filename, $filename);
 
@@ -59,5 +61,10 @@ class TestController extends Controller
         $guid = substr($charid, 0, 8) . $hyphen . substr($charid, 8, 4) . $hyphen . substr($charid, 12, 4) .
             $hyphen . substr($charid, 16, 4) . $hyphen . substr($charid, 20, 12);
         dd($guid);
+    }
+
+    public function token()
+    {
+        return 'admin-token';
     }
 }

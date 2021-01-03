@@ -1,9 +1,9 @@
 <?php
 namespace App\Services;
 
-use App\Exceptions\ApiException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Taoran\Laravel\Exception\ApiException;
 
 class LoginService
 {
@@ -16,7 +16,7 @@ class LoginService
             //账号不存在
             throw new ApiException("账号或密码不正确！");
         }
-        if (!check_password($admin_user->password, $data['password'], $admin_user->salt)) {
+        if (encrypt_password($data['password'], $admin_user->salt) != $admin_user->password) {
             //密码错误
             throw new ApiException("账号或密码不正确！");
         }
@@ -25,7 +25,7 @@ class LoginService
         $admin_user = [
             'admin_user' => [
                 'admin_id' => $admin_user->id,
-                'admin_name' => $admin_user->name
+                'admin_name' => $admin_user->account
             ]
         ];
         session()->put('admin_user', $admin_user);

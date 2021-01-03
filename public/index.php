@@ -1,5 +1,4 @@
 <?php
-phpinfo();
 define('LARAVEL_START', microtime(true));
 
 /**
@@ -25,19 +24,21 @@ error_reporting(E_ALL | E_STRICT);
 */
 
 
-$origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '';
+/*$origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '';
 //解决跨域
 $allowOrigin = [
     'http://127.0.0.1:8020',
     'http://localhost:8020',
+    'http://localhost:9527',
 ];
 
 if (in_array($origin, $allowOrigin)) {
     header('Access-Control-Allow-Origin:' . $origin);
-}
+}*/
+header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Credentials: true');  //是否支持cookie跨域
 header('Access-Control-Allow-Methods: GET, POST, PUT,DELETE,OPTIONS,PATCH');
-header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, X-ISAPI");
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, X-ISAPI, X-Token");
 
 
 require __DIR__.'/../vendor/autoload.php';

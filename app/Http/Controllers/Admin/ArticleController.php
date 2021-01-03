@@ -3,10 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Repositorys\ArticleRepository;
+use App\Services\ArticleService;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
+
+    protected $article;
+
+    public function __construct(ArticleService $articleService)
+    {
+        $this->article = $articleService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +24,8 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        //
+        $data = $this->article->getList();
+        return response_json($data);
     }
 
     /**
@@ -22,9 +33,9 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+
     }
 
     /**
@@ -35,7 +46,15 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $param = verify('POST', [
+            'title' => 'required',
+            'cover' => 'required',
+            'cat_id' => 'required',
+            'is_show' => 'required',
+            'content' => 'required',
+        ]);
+        $this->article->add($param);
+        return response_json();
     }
 
     /**

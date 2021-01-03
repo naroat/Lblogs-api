@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exceptions\ApiException;
+use Taoran\Laravel\Exception\ApiException;
 use App\Http\Controllers\Controller;
 use App\Services\ArticleCategoryService;
 use Illuminate\Support\Facades\Validator;
@@ -82,13 +82,15 @@ class ArticleCategoryController extends Controller
     public function destroy($id)
     {
         $this->articleCategoryService->delete($id);
+
+        return response_json();
     }
 
     //验证
     public function storeVerify($request)
     {
         $param['name'] = $request->get('name');
-        $param['parent_id'] = $request->get('parent_id');
+        //$param['parent_id'] = $request->get('parent_id');
 
         $rule = [
             'name' => 'required|max:20',

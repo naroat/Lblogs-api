@@ -53,6 +53,10 @@ class UploadController extends Controller
                 $upload->path = 'public/img';
                 $upload->acl = 'public';    //设置访问权限
                 break;
+            case 'article_cover':
+                $upload->path = 'article/cover';
+                $upload->acl = 'public';    //设置访问权限
+                break;
             default:
                 throw new ApiException('上传类型错误');
                 break;

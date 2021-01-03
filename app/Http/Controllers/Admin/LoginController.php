@@ -8,12 +8,9 @@ use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Taoran\Laravel\Exception\ApiException;
-use Taoran\Laravel\Traits\Response;
 
 class LoginController extends Controller
 {
-    use Response;
-
     //登录
     public function login(Request $request)
     {
@@ -26,8 +23,8 @@ class LoginController extends Controller
         if ($validator->fails()) throw new ApiException($validator->errors()->first());
 
         $data = \App\Services\LoginService::login($request->all());
-
-        return response_json($data);
+        $data['token'] = 'admin_token';
+        return response_json($data, 200);
     }
 
     //注销

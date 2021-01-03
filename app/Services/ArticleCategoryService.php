@@ -37,8 +37,8 @@ class ArticleCategoryService
         return $this->articleCategoryRepository->update($data, $param);
     }
 
-    public function delete()
+    public function delete($id)
     {
-        return $this->articleCategoryRepository->delete();
+        return $this->articleCategoryRepository->delete($id);
     }
 }
