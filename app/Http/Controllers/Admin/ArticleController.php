@@ -99,6 +99,6 @@ class ArticleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->article->delete();
     }
 }

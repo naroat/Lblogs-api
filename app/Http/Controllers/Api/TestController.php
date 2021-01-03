@@ -17,6 +17,14 @@ class TestController extends Controller
     //
     public function index(Request $request)
     {
+        if (config()) {
+
+        }
+        $file_url = request()->getSchemeAndHttpHost();
+        dd($file_url);
+
+//        return $file_url;
+
         $p = '123123';
         dd(encrypt_password($p, 'kPu9r'));
         $filename = 'f8d267922af3cccc63277557e036ea49.jpg';

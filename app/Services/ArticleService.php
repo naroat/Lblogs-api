@@ -32,7 +32,7 @@ class ArticleService
 
     public function update($param, $id)
     {
-        $data = $this->articleRepository->getOneById($id);
+        $data = $this->articleRepository->getOne($id);
 
         return $this->articleRepository->update($data, $param);
     }
