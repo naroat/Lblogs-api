@@ -5,16 +5,14 @@ namespace App\Repositorys;
 
 
 use App\Model\AdminUserModel;
-use App\Packages\Core\src\Repository\Repository;
-use App\Packages\Core\src\Traits\CallbackTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use PhpParser\Node\Expr\AssignOp\Mod;
+use Taoran\Laravel\Exception\ApiException;
+use Taoran\Laravel\Repository;
 
 class AdminUserRepository extends Repository
 {
-    use CallbackTrait;
-
     protected $model;
 
     public function __construct()
@@ -31,8 +29,9 @@ class AdminUserRepository extends Repository
     public function getAdminUserOne(array $param)
     {
         return $this->getOne(function ($query) use ($param) {
-            //设置筛选条件
-            $this->setConditions($query, $param);
+            if (isset($param['account'])) {
+                $query->where('account', $param['account']);
+            }
         });
     }
 
@@ -45,25 +44,27 @@ class AdminUserRepository extends Repository
     public function getAdminUserList(array $param)
     {
         return $this->getList($param, function ($query) use ($param) {
-            //设置筛选条件
-            $this->setConditions($query, $param);
+            $query->with(['roles' => function ($query) {
+                $query->select('name');
+            }])->orderBy('id', 'DESC');
+
+            //筛选名称
+            if (isset($param['name'])) {
+                $query->where('name', 'like', '%' . $param['name'] . '%');
+            }
+
+            //筛选手机号码
+            if (isset($param['phone'])) {
+                $query->where('phone', $param['phone']);
+            }
+
+            //筛选创建时间
+            if (isset($param['start_time']) && isset($param['end_time'])) {
+                if ($param['start_time'] > $param['end_time']) {
+                    throw new ApiException('开始时间不能大于结束时间');
+                }
+                $query->whereBetween('created_at', [$param['start_time'], $param['end_time']]);
+            }
         });
-    }
-
-    /**
-     * 设置条件
-     *
-     * @param Builder $orm
-     * @param array $param
-     */
-    public function setConditions(Builder $orm, array $param)
-    {
-        if (isset($param['id'])) {
-            $orm->where('id', $param['id']);
-        }
-
-        if (isset($param['orderBy'])) {
-            $orm->orderBy($param['orderBy'][0], $param['orderBy'][1]);
-        }
     }
 }

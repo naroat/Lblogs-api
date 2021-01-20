@@ -3,10 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Repositorys\AdminRoleRepository;
+use App\Services\AdminRoleService;
 use Illuminate\Http\Request;
 
 class AdminRoleController extends Controller
 {
+    protected $adminRole;
+
+    public function __construct(AdminRoleService $adminRole)
+    {
+        $this->adminRole = $adminRole;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +23,8 @@ class AdminRoleController extends Controller
      */
     public function index()
     {
-        //
+        $list = $this->adminRole->getList();
+        return response_json($list);
     }
 
     /**
@@ -35,7 +45,14 @@ class AdminRoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $param = verify('POST', [
+            'name' => 'required',
+            'description' => 'required'
+        ]);
+
+        $this->adminRole->addAdminRole($param);
+
+        return response_json();
     }
 
     /**
@@ -46,7 +63,8 @@ class AdminRoleController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = $this->adminRole->getOneAdminRole($id);
+        return response_json($data);
     }
 
     /**
@@ -69,7 +87,12 @@ class AdminRoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $param = verify('POST', [
+            'name' => '',
+            'description' => ''
+        ]);
+        $this->adminRole->updateAdminRole($param, $id);
+        return response_json();
     }
 
     /**
@@ -80,6 +103,7 @@ class AdminRoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->adminRole->deleteAdminRole($id);
+        return response_json();
     }
 }

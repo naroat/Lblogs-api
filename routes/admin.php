@@ -17,6 +17,8 @@ Route::delete('logouts', 'Admin\LoginController@logout');
 Route::group(['middleware' => ['AdminAuth']], function () {
     //管理员管理
     Route::resource('users', 'Admin\AdminUserController');
+    //角色管理
+    Route::resource('roles', 'Admin\AdminRoleController');
     //文章管理
     Route::resource('articles', 'Admin\ArticleController');
     //文章标签管理

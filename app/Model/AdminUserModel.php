@@ -10,4 +10,12 @@ class AdminUserModel extends Model
 
     protected $dateFormat = 'U';
 
+    /**
+     * 用户的角色
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(AdminRoleModel::class,'admin_user_role','admin_user_id','admin_role_id');
+    }
+
 }

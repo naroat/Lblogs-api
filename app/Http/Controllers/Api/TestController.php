@@ -14,9 +14,17 @@ use Taoran\Laravel\Upload\Upload;
 
 class TestController extends Controller
 {
-    //
+
     public function index(Request $request)
     {
+        $password = create_password('123123', $salt);
+        dd($password);
+
+        dd(ip2long(Request()->getClientIp()));
+        return $this->paramVerify();
+
+
+        dd(123123);
         if (config()) {
 
         }
@@ -74,5 +82,27 @@ class TestController extends Controller
     public function token()
     {
         return 'admin-token';
+    }
+
+    public function paramVerify()
+    {
+        //默认不必填,required:必填, 不传默认字符串
+        //string,int,email
+        //digits: 指定长度
+        //digits_between: 长度范围
+        //需要自定义添加: mobile,
+        $param = verify('GET', [
+            'name' => 'int|required',
+            'phone'=> 'mobile',
+            'email'=> 'email',
+            'start_time' => 'string',
+            'end_time' => 'string',
+            'is_bind' => 'in:0,1',
+            'num' => 'between:1,5|int', //必须添加int, 不然between不生效
+            //数组
+            'arr.*.id' => 'int',
+            'arr.*.name' => '',
+        ]);
+        return response_json($param);
     }
 }
