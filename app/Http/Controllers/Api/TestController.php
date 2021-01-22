@@ -17,6 +17,17 @@ class TestController extends Controller
 
     public function index(Request $request)
     {
+
+        /*$admin_user = [
+            'admin_user' => [
+                'admin_id' => 1,
+                'admin_name' => 'admin'
+            ]
+        ];
+        session()->put('admin_user', $admin_user);
+        session()->save();*/
+
+        dd(session()->get('admin_user'));
         $password = create_password('123123', $salt);
         dd($password);
 
