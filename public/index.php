@@ -1,4 +1,5 @@
 <?php
+dd('ssssssss');
 define('LARAVEL_START', microtime(true));
 
 /**

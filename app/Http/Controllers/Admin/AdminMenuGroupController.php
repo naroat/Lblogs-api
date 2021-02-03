@@ -1,18 +1,17 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Services\AdminMenuService;
+use App\Services\AdminMenuGroupService;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class AdminMenuController extends Controller
+class AdminMenuGroupController extends Controller
 {
-    protected $adminMenu;
+    protected $adminMenuGroup;
 
-    public function __construct(AdminMenuService $adminMenu)
+    public function __construct(AdminMenuGroupService $adminMenuGroup)
     {
-        $this->adminMenu = $adminMenu;
+        $this->adminMenuGroup = $adminMenuGroup;
     }
 
     /**
@@ -23,7 +22,7 @@ class AdminMenuController extends Controller
      */
     public function index()
     {
-        $list = $this->adminMenu->getList([]);
+        $list = $this->adminMenuGroup->getList([]);
 
         return response_json($list);
     }
@@ -41,14 +40,11 @@ class AdminMenuController extends Controller
             'name' => 'required',
             'description' => '',
             'url' => '',
-            //'icon' => 'no_required',
-            'level' => 'int|required',
             'parent_id' => 'int|required',
-            'is_auth' => 'int',
-            'order' => 'int'
+            'order' => 'int|required'
         ]);
 
-        $this->adminMenu->add($param);
+        $this->adminMenuGroup->add($param);
 
         return response_json();
     }
@@ -62,7 +58,7 @@ class AdminMenuController extends Controller
      */
     public function show($id)
     {
-        $this->adminMenu->getOne($id);
+        $this->adminMenuGroup->getOne($id);
 
         return response_json();
     }
@@ -81,15 +77,12 @@ class AdminMenuController extends Controller
             'name' => '',
             'description' => '',
             'url' => '',
-            //'icon' => 'no_required',
-            'parent_id' => 'int',
-            'order' => 'int',
-            'menu_group_id' => 'int',
+            'order' => 'int'
         ]);
 
-        $this->adminMenu->edit($param, $id);
+        $this->adminMenuGroup->edit($param, $id);
 
-        return $this->response();
+        return response_json();
     }
 
     /**
@@ -103,8 +96,8 @@ class AdminMenuController extends Controller
     {
         $this->verifyId($id);
 
-        $this->adminMenu->delete($id);
+        $this->adminMenuGroup->delete($id);
 
-        return $this->response();
+        return response_json();
     }
 }

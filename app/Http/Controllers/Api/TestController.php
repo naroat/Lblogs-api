@@ -17,7 +17,7 @@ class TestController extends Controller
 
     public function index(Request $request)
     {
-
+        dd('12313123');
         /*$admin_user = [
             'admin_user' => [
                 'admin_id' => 1,

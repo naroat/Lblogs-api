@@ -25,7 +25,7 @@ class AdminMenuGroupModel extends Model
      */
     public function childs()
     {
-        return $this->hasMany('App\Model\AdminMenuGroupModel', 'parent_id', 'id');
+        return $this->hasMany(\App\Model\AdminMenuGroupModel::class, 'parent_id', 'id');
     }
 
     /**

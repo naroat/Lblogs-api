@@ -16,7 +16,7 @@ class LoginService
             //账号不存在
             throw new ApiException("账号或密码不正确！");
         }
-        if (encrypt_password($data['password'], $admin_user->salt) != $admin_user->password) {
+        if (!eq_password($admin_user->password, $data['password'], $admin_user->salt)) {
             //密码错误
             throw new ApiException("账号或密码不正确！");
         }
