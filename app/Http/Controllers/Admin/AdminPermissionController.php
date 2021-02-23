@@ -1,35 +1,38 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Services\AdminMenuService;
+use App\Services\AdminPermissionService;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class AdminMenuController extends Controller
+class AdminPermissionController extends Controller
 {
-    protected $adminMenu;
+    protected $adminPermission;
 
-    public function __construct(AdminMenuService $adminMenu)
+    public function __construct(AdminPermissionService $adminPermission)
     {
-        $this->adminMenu = $adminMenu;
+        $this->adminPermission = $adminPermission;
     }
 
     /**
-     * 列表
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \App\Exceptions\ApiException
      */
     public function index()
     {
-        $list = $this->adminMenu->getList([]);
+        $params = verify('GET', [
+            'permission_id' => 'int'
+        ]);
+
+        $list = $this->adminPermission->getAdminPermissionList($params);
 
         return response_json($list);
     }
 
     /**
-     * 添加数据
+     * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -37,23 +40,22 @@ class AdminMenuController extends Controller
      */
     public function store(Request $request)
     {
-        $param = verify('POST', [
+        $params = verify('POST', [
             'name' => 'required',
+            'code' => '',
             'description' => '',
-            'url' => '',
-            'level' => 'int|required',
             'parent_id' => 'int|required',
-            'is_auth' => 'int',
-            'order' => 'int'
-        ]);
+            'level' => 'int|required',
+            'is_auth' => 'int'
+        ], 'POST');
 
-        $this->adminMenu->add($param);
+        $this->adminPermission->addAdminPermission($params);
 
         return response_json();
     }
 
     /**
-     * 显示单项
+     * Display the specified resource.
      *
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
@@ -61,13 +63,13 @@ class AdminMenuController extends Controller
      */
     public function show($id)
     {
-        $this->adminMenu->getOne($id);
+        $data = $this->adminPermission->getOneAdminPermission($id);
 
-        return response_json();
+        return response_json($data);
     }
 
     /**
-     * 更新
+     * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
@@ -76,22 +78,23 @@ class AdminMenuController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $param = verify('POST', [
+        $params = verify('POST', [
             'name' => '',
+            'code' => '',
             'description' => '',
-            'url' => '',
             'parent_id' => 'int',
-            'order' => 'int',
-            'menu_group_id' => 'int',
-        ]);
+            'level' => 'int',
+            'is_auth' => 'int'
+        ], 'POST');
 
-        $this->adminMenu->edit($param, $id);
+
+        $this->adminPermission->udpateAdminPermission($this->verifyData, $id);
 
         return response_json();
     }
 
     /**
-     * 删除
+     * Remove the specified resource from storage.
      *
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
@@ -99,9 +102,7 @@ class AdminMenuController extends Controller
      */
     public function destroy($id)
     {
-        $this->verifyId($id);
-
-        $this->adminMenu->delete($id);
+        $this->adminPermission->deleteAdminPermission($id);
 
         return response_json();
     }
