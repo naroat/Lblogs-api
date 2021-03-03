@@ -12,6 +12,7 @@
         "aliyuncs/oss-sdk-php": "^2.4",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.2",
+        "laravel/horizon": "^3.6",
         "laravel/telescope": "^2.1",
         "laravel/tinker": "^2.0",
         "lcobucci/jwt": "^3.3",
