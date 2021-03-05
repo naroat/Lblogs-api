@@ -9,4 +9,6 @@ class ArticleModel extends Model
     protected $table = 'article';
 
     protected $dateFormat = 'U';
+
+    protected $hidden = ['is_on'];
 }

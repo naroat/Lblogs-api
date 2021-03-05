@@ -23,4 +23,6 @@ class FormModel extends Model
     protected $casts = [
         'id' => 'string',   //把id返回字符串
     ];
+
+    protected $hidden = ['is_on'];
 }

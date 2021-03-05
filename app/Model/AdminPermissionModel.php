@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class AdminPermissionModel extends Model
 {
-    use CoreModel;
-
     protected $table = 'admin_permission';
 
     //定义为秒时间戳
@@ -20,5 +18,7 @@ class AdminPermissionModel extends Model
     protected $casts = [
         'id' => 'string',   //把id返回字符串
     ];
+
+    protected $hidden = ['is_on'];
 
 }

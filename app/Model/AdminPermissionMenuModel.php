@@ -11,5 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 class AdminPermissionMenuModel extends Model
 {
     protected $table = 'admin_permission_menu';
+
     public $timestamps = false;
+
+    protected $hidden = ['is_on'];
 }

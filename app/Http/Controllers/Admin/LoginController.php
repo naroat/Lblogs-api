@@ -22,7 +22,7 @@ class LoginController extends Controller
         //验证失败
         if ($validator->fails()) throw new ApiException($validator->errors()->first());
 
-        $data = \App\Services\LoginService::login($request->all());
+        $data = \App\Logic\Admin\LoginLogic::login($request->all());
         $data['token'] = 'admin_token';
         return response_json($data, 200);
     }

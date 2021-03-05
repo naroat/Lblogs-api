@@ -13,4 +13,5 @@ class AdminUserRoleModel extends Model
 {
     protected $table = 'admin_user_role';
     public $timestamps  = false;
+    protected $hidden = ['is_on'];
 }

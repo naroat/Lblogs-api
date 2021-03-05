@@ -13,4 +13,5 @@ class AdminRolePermissionModel extends Model
 {
     protected $table = 'admin_role_permission';
     public $timestamps = false;
+    protected $hidden = ['is_on'];
 }

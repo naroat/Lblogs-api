@@ -1,19 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use App\Services\AdminMenuGroupService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class AdminMenuGroupController extends Controller
 {
-    protected $adminMenuGroup;
-
-    public function __construct(AdminMenuGroupService $adminMenuGroup)
-    {
-        $this->adminMenuGroup = $adminMenuGroup;
-    }
-
     /**
      * 列表
      *
@@ -22,7 +14,11 @@ class AdminMenuGroupController extends Controller
      */
     public function index()
     {
-        $list = $this->adminMenuGroup->getList([]);
+        $params = verify('GET', [
+            'menu_id' => 'int',
+            'no_page' => 'in:1'
+        ]);
+        $list = \App\Logic\Admin\AdminMenuGroupLogic::getAdminMenuGroupList($params);
 
         return response_json($list);
     }
@@ -36,15 +32,15 @@ class AdminMenuGroupController extends Controller
      */
     public function store(Request $request)
     {
-        $param = verify('POST', [
+        $params = verify('POST', [
             'name' => 'required',
             'description' => '',
             'url' => '',
-            'parent_id' => 'int|required',
-            'order' => 'int|required'
+            'parent_id' => 'int',
+            'order' => 'int'
         ]);
 
-        $this->adminMenuGroup->add($param);
+        \App\Logic\Admin\AdminMenuGroupLogic::addAdminMenuGroup($params);
 
         return response_json();
     }
@@ -58,9 +54,9 @@ class AdminMenuGroupController extends Controller
      */
     public function show($id)
     {
-        $this->adminMenuGroup->getOne($id);
+        $data = \App\Logic\Admin\AdminMenuGroupLogic::getOneAdminMenuGroup($id);
 
-        return response_json();
+        return response_json($data);
     }
 
     /**
@@ -73,14 +69,14 @@ class AdminMenuGroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $param = verify('POST', [
+        $params = verify('POST', [
             'name' => '',
             'description' => '',
             'url' => '',
             'order' => 'int'
         ]);
 
-        $this->adminMenuGroup->edit($param, $id);
+        \App\Logic\Admin\AdminMenuGroupLogic::updateAdminMenuGroup($params, $id);
 
         return response_json();
     }
@@ -94,9 +90,7 @@ class AdminMenuGroupController extends Controller
      */
     public function destroy($id)
     {
-        $this->verifyId($id);
-
-        $this->adminMenuGroup->delete($id);
+        \App\Logic\Admin\AdminMenuGroupLogic::deleteAdminMenuGroup($id);
 
         return response_json();
     }

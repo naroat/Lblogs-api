@@ -10,6 +10,8 @@ class AdminUserModel extends Model
 
     protected $dateFormat = 'U';
 
+    protected $hidden = ['is_on'];
+
     /**
      * 用户的角色
      */

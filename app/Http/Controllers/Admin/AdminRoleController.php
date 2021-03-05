@@ -2,55 +2,43 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Repositorys\AdminRoleRepository;
-use App\Services\AdminRoleService;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class AdminRoleController extends Controller
 {
-    protected $adminRole;
-
-    public function __construct(AdminRoleService $adminRole)
-    {
-        $this->adminRole = $adminRole;
-    }
-
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\ApiException
      */
     public function index()
     {
-        $list = $this->adminRole->getList();
-        return response_json($list);
-    }
+        $params = verify('GET', [
+            'is_page' => 'in:0,1'
+        ]);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $list = \App\Logic\Admin\AdminRoleLogic::getAdminRoleList($params);
+
+        return response_json($list);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\ApiException
      */
     public function store(Request $request)
     {
-        $param = verify('POST', [
+        $params = verify('POST', [
             'name' => 'required',
             'description' => 'required'
         ]);
 
-        $this->adminRole->addAdminRole($param);
+        \App\Logic\Admin\AdminRoleLogic::addAdminRole($params);
 
         return response_json();
     }
@@ -58,52 +46,48 @@ class AdminRoleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\ApiException
      */
     public function show($id)
     {
-        $data = $this->adminRole->getOneAdminRole($id);
-        return response_json($data);
-    }
+        $data = \App\Logic\Admin\AdminRoleLogic::getOneAdminRole($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return response_json($data);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\ApiException
      */
     public function update(Request $request, $id)
     {
-        $param = verify('POST', [
+        $params = verify('POST', [
             'name' => '',
             'description' => ''
         ]);
-        $this->adminRole->updateAdminRole($param, $id);
+
+        \App\Logic\Admin\AdminRoleLogic::updateAdminRole($params, $id);
+
         return response_json();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\ApiException
      */
     public function destroy($id)
     {
-        $this->adminRole->deleteAdminRole($id);
+        \App\Logic\Admin\AdminRoleLogic::deleteAdminRole($id);
+
         return response_json();
     }
 }

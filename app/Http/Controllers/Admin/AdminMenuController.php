@@ -1,35 +1,30 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Services\AdminMenuService;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class AdminMenuController extends Controller
 {
-    protected $adminMenu;
-
-    public function __construct(AdminMenuService $adminMenu)
-    {
-        $this->adminMenu = $adminMenu;
-    }
-
     /**
-     * 列表
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \App\Exceptions\ApiException
      */
     public function index()
     {
-        $list = $this->adminMenu->getList([]);
+        $params = verify('GET', [
+            'menu_id' => 'int'
+        ]);
+
+        $list = \App\Logic\Admin\AdminMenuLogic::getAdminMenuList($params);
 
         return response_json($list);
     }
 
     /**
-     * 添加数据
+     * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -37,23 +32,23 @@ class AdminMenuController extends Controller
      */
     public function store(Request $request)
     {
-        $param = verify('POST', [
+        $params = verify('POST', [
             'name' => 'required',
             'description' => '',
             'url' => '',
             'level' => 'int|required',
             'parent_id' => 'int|required',
-            'is_auth' => 'int',
-            'order' => 'int'
+            'order' => 'int|required',
+            'menu_group_id' => 'int'
         ]);
 
-        $this->adminMenu->add($param);
+        \App\Logic\Admin\AdminMenuLogic::addAdminMenu($params);
 
         return response_json();
     }
 
     /**
-     * 显示单项
+     * Display the specified resource.
      *
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
@@ -61,13 +56,13 @@ class AdminMenuController extends Controller
      */
     public function show($id)
     {
-        $this->adminMenu->getOne($id);
+        $data = \App\Logic\Admin\AdminMenuLogic::getOneAdminMenu($id);
 
-        return response_json();
+        return response_json($data);
     }
 
     /**
-     * 更新
+     * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
@@ -76,22 +71,22 @@ class AdminMenuController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $param = verify('POST', [
+        $params = verify('POST', [
             'name' => '',
             'description' => '',
             'url' => '',
             'parent_id' => 'int',
             'order' => 'int',
-            'menu_group_id' => 'int',
+            'menu_group_id' => 'int'
         ]);
 
-        $this->adminMenu->edit($param, $id);
+        \App\Logic\Admin\AdminMenuLogic::updateAdminMenu($params, $id);
 
         return response_json();
     }
 
     /**
-     * 删除
+     * Remove the specified resource from storage.
      *
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
@@ -99,10 +94,22 @@ class AdminMenuController extends Controller
      */
     public function destroy($id)
     {
-        $this->verifyId($id);
-
-        $this->adminMenu->delete($id);
+        \App\Logic\Admin\AdminMenuLogic::deleteAdminMenu($id);
 
         return response_json();
+    }
+
+    /**
+     * 获取有链接的菜单
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\ApiException]
+     */
+    public function getMenuList(Request $request)
+    {
+        $list = \App\Logic\Admin\AdminMenuLogic::getMenuList();
+
+        return response_json($list);
     }
 }

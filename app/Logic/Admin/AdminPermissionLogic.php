@@ -1,55 +1,35 @@
 <?php
 
-namespace App\Services;
+namespace App\Logic\Admin;
 
-use App\Exceptions\DatabaseException;
-use App\Repositorys\AdminMenuRepository;
-use App\Repositorys\AdminPermissionRepository;
 use Taoran\Laravel\Exception\ApiException;
-use App\Repositorys\AdminPermissionMenuRepository;
 
-class AdminPermissionService
+class AdminPermissionLogic
 {
-    protected $adminPermissionRepository;
-    protected $adminMenuRepository;
-    protected $adminPermissionMenuRepository;
-
-    public function __construct()
-    {
-        $this->adminPermissionRepository = new AdminPermissionRepository();
-        $this->adminMenuRepository = new AdminMenuRepository();
-        $this->adminPermissionMenuRepository = new AdminPermissionMenuRepository();
-    }
 
     /**
      * 权限列表
      * @param int $data 用于判断的数据
      * @return array
      */
-    public function getAdminPermissionList($data)
+    public static function getAdminPermissionList($data)
     {
-        $role = session('admin_info.role');
+        $list = \App\Model\AdminPermissionModel::where('is_on', 1)->orderBy('sort');
 
         $get_one = array();
 
-        $list = $this->adminPermissionRepository->getList($data, function ($query) use ($role, $data, &$get_one) {
-            $query->where('is_on', 1)->orderBy('sort');
-            if (!in_array(1, $role)) {
-                $query->where('is_auth', 0);
-            }
-            if (isset($data['permission_id'])) {
-                $get_one = \App\Model\AdminPermissionModel::where('is_on', '=', 1)
-                    ->select('id', 'name')
-                    ->find($data['permission_id']);
+        if (isset($data['permission_id'])) {
+            $get_one = \App\Model\AdminPermissionModel::where('is_on', 1)->find($data['permission_id']);
 
-                if (!$get_one) {
-                    throw new ApiException('权限不存在!');
-                }
-                $query->where('parent_id', '=', $data['permission_id'])->paginate(15);
-            } else {
-                $query->where('parent_id', '=', 0)->paginate(15);
+            if (!$get_one) {
+                throw new ApiException('权限不存在!');
             }
-        });
+
+            $list = $list->where('parent_id', $data['permission_id'])->paginate(15);
+        } else {
+            $list = $list->where('parent_id', 0)
+                ->paginate(15);
+        }
 
         return [
             'list' => $list,
@@ -63,11 +43,9 @@ class AdminPermissionService
      * @return \App\Model\AdminPermissionModel|array|\Illuminate\Database\Query\Builder|null|\stdClass
      * @throws ApiException
      */
-    public function getOneAdminPermission($id)
+    public static function getOneAdminPermission($id)
     {
-        $data = $this->adminPermissionRepository->getOne(function ($query) use ($id) {
-            $query->where('id', $id);
-        });
+        $data = \App\Model\AdminPermissionModel::where('is_on', '=', 1)->find($id);
 
         if (!$data) {
             throw new ApiException('权限不存在!');
@@ -81,9 +59,14 @@ class AdminPermissionService
      * @return bool
      * @throws ApiException
      */
-    public function addAdminPermission($data)
+    public static function addAdminPermission($data)
     {
-        $this->adminPermissionRepository->create($data);
+        $admin_permission_model = new \App\Model\AdminPermissionModel();
+        set_save_data($admin_permission_model, $data);
+        $res = $admin_permission_model->save();
+        if (empty($res)) {
+            throw new ApiException('添加权限失败');
+        }
         return true;
     }
 
@@ -94,16 +77,19 @@ class AdminPermissionService
      * @return bool
      * @throws ApiException
      */
-    public function udpateAdminPermission($data, $id)
+    public static function udpateAdminPermission($data, $id)
     {
-        $res = $this->adminPermissionRepository->getOneById($id);
+        $res = \App\Model\AdminPermissionModel::where('is_on', '=', 1)->find($id);
 
         if (!$res) {
             throw new ApiException('权限不存在!');
         }
 
-        $this->adminPermissionRepository->update($res, $data);
-
+        set_save_data($res, $data);
+        $update = $res->save($data);
+        if (!$update) {
+            throw new DatabaseException();
+        }
         return true;
     }
 
@@ -113,28 +99,31 @@ class AdminPermissionService
      * @return bool
      * @throws ApiException
      */
-    public function deleteAdminPermission($id)
+    public static function deleteAdminPermission($id)
     {
-        $permission = $this->adminPermissionRepository->getOneById($id);
+        $permission = \App\Model\AdminPermissionModel::where('is_on', '=', 1)
+            ->select(['id', 'level'])
+            ->find($id);
 
         if (!$permission) {
             throw new ApiException('权限不存在!');
         }
 
         if ($permission->level == 1) {
-            $res = $this->adminPermissionRepository->getOne(function ($query) use ($id) {
-                $query->where('id', '=', $id)->orWhere('parent_id', '=', $id);
-            });
-
-            $this->adminPermissionRepository->update($res, [
-                'is_on' => 0
-            ]);
+            $res = \App\Model\AdminPermissionModel::where('id', '=', $id)
+                ->orWhere('parent_id', '=', $id)
+                ->update(['is_on' => 0]);
         } else if ($permission->level == 2) {
-            $this->adminPermissionRepository->update($permission, [
+            set_save_data($permission, [
                 'is_on' => 0
             ]);
+
+            $res = $permission->save();
         }
 
+        if (!$res) {
+            throw new DatabaseException();
+        }
         return true;
     }
 
@@ -146,7 +135,7 @@ class AdminPermissionService
      * @throws ApiException
      * @throws \Exception
      */
-    public function addAdminPermissionMenu($data, $admin_permission_id)
+    public static function addAdminPermissionMenu($data, $admin_permission_id)
     {
         $list = [];
         if (empty($data)) {
@@ -155,19 +144,25 @@ class AdminPermissionService
 
         \DB::beginTransaction();
         foreach ($data as $val) {
-            $menu_permission = $this->adminPermissionMenuRepository->getOne(function ($query) use ($admin_permission_id, $val) {
-                $query->where('admin_permission_id', '=', $admin_permission_id)
-                    ->where('admin_menu_id', $val['admin_menu_id']);
-            });
+            $menu_permission = \App\Model\AdminPermissionMenuModel::where('admin_permission_id', '=', $admin_permission_id)
+                ->where('admin_menu_id', $val['admin_menu_id'])
+                ->first();
             if ($menu_permission) {
                 throw new ApiException('重复添加!');
             }
 
+            $admin_permission_menu_model = new \App\Model\AdminPermissionMenuModel();
             $admin_permission_menu_data = array(
                 'admin_permission_id' => $admin_permission_id,
                 'admin_menu_id' => $val['admin_menu_id']
             );
-            $admin_permission_menu_model = $this->adminPermissionMenuRepository->create($admin_permission_menu_data);
+
+            set_save_data($admin_permission_menu_model, $admin_permission_menu_data);
+            $res = $admin_permission_menu_model->save();
+            if (!$res) {
+                \DB::rollBack();
+                throw new ApiException('添加失败');
+            }
 
             $list[] = $admin_permission_menu_model->id;
         }
@@ -184,7 +179,7 @@ class AdminPermissionService
      * @return bool
      * @throws ApiException
      */
-    public function deleteAdminPermissionMenu($data, $admin_permission_id)
+    public static function deleteAdminPermissionMenu($data, $admin_permission_id)
     {
         if (empty($data)) {
             throw new ApiException('删除失败');
@@ -207,20 +202,14 @@ class AdminPermissionService
      * @param int $admin_permission_id 权限ID
      * @return array
      */
-    public function getAdminPermissMenuionList($admin_permission_id)
+    public static function getAdminPermissMenuionList($admin_permission_id)
     {
         $list = [];
         //查询所有的菜单
-        $admin_menu_all = $this->adminMenuRepository->getList([
-            'is_all' => 1
-        ]);
+        $admin_menu_all = \App\Model\AdminMenuModel::where('is_on', '=', 1)->get();
 
         //查询当前权限的关联菜单
-        $admin_permission_menu = $this->adminPermissionMenuRepository->getList([
-            'is_all' => 1
-        ], function ($query) use ($admin_permission_id) {
-            $query->where('admin_permission_id', $admin_permission_id);
-        });
+        $admin_permission_menu = \App\Model\AdminPermissionMenuModel::where('admin_permission_id', '=', $admin_permission_id)->get();
 
         $admin_menu_id = [];
         if (!$admin_permission_menu->isEmpty()) {

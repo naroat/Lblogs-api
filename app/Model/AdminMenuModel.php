@@ -20,6 +20,8 @@ class AdminMenuModel extends Model
         'id' => 'string',   //把id返回字符串
     ];
 
+    protected $hidden = ['is_on'];
+
     /**
      * 下级菜单
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

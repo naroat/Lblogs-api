@@ -1,11 +1,11 @@
 <?php
-namespace App\Services;
+namespace App\Logic\Admin;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Taoran\Laravel\Exception\ApiException;
 
-class LoginService
+class LoginLogic
 {
     public static function login($data)
     {
@@ -21,16 +21,25 @@ class LoginService
             throw new ApiException("账号或密码不正确！");
         }
 
-        //登录成功
-        $admin_user = [
-            'admin_user' => [
-                'admin_id' => $admin_user->id,
-                'admin_name' => $admin_user->account
-            ]
-        ];
-        session()->put('admin_user', $admin_user);
+        $role = [];
+        $role_info = $admin_user->roles()->get(['admin_role_id', 'name']);
+        if (!$role_info->isEmpty()) {
+            foreach ($role_info as $v) {
+                $role[] = $v->admin_role_id;
+            }
+        }
+
+        //保存session
+        session()->put('admin_user', [
+            'admin_id' => $admin_user->id,
+            'role' => $role,
+        ]);
         session()->save();
 
-        return $admin_user;
+        return [
+            'admin_id' => $admin_user->id,
+            'admin_name' => $admin_user->account,
+            'roles' => $role_info
+        ];;
     }
 }

@@ -24,6 +24,9 @@ class AdminRoleModel extends Model
         'id' => 'string',   //把id返回字符串
     ];
 
+    protected $hidden = ['is_on'];
+
+
     /**
      * 角色权限
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

@@ -1,19 +1,11 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use App\Services\AdminPermissionService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class AdminPermissionController extends Controller
 {
-    protected $adminPermission;
-
-    public function __construct(AdminPermissionService $adminPermission)
-    {
-        $this->adminPermission = $adminPermission;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -25,8 +17,7 @@ class AdminPermissionController extends Controller
         $params = verify('GET', [
             'permission_id' => 'int'
         ]);
-
-        $list = $this->adminPermission->getAdminPermissionList($params);
+        $list = \App\Logic\Admin\AdminPermissionLogic::getAdminPermissionList($params);
 
         return response_json($list);
     }
@@ -44,12 +35,11 @@ class AdminPermissionController extends Controller
             'name' => 'required',
             'code' => '',
             'description' => '',
-            'parent_id' => 'int|required',
-            'level' => 'int|required',
-            'is_auth' => 'int'
-        ], 'POST');
+            'parent_id' => 'int',
+            'level' => 'in:1,2'
+        ]);
 
-        $this->adminPermission->addAdminPermission($params);
+        \App\Logic\Admin\AdminPermissionLogic::addAdminPermission($params);
 
         return response_json();
     }
@@ -63,7 +53,7 @@ class AdminPermissionController extends Controller
      */
     public function show($id)
     {
-        $data = $this->adminPermission->getOneAdminPermission($id);
+        $data = \App\Logic\Admin\AdminPermissionLogic::getOneAdminPermission($id);
 
         return response_json($data);
     }
@@ -83,12 +73,11 @@ class AdminPermissionController extends Controller
             'code' => '',
             'description' => '',
             'parent_id' => 'int',
-            'level' => 'int',
-            'is_auth' => 'int'
-        ], 'POST');
+            'level' => 'in:1,2',
+            'is_auth' => 'in:0,1'
+        ]);
 
-
-        $this->adminPermission->udpateAdminPermission($this->verifyData, $id);
+        \App\Logic\Admin\AdminPermissionLogic::udpateAdminPermission($params, $id);
 
         return response_json();
     }
@@ -102,7 +91,7 @@ class AdminPermissionController extends Controller
      */
     public function destroy($id)
     {
-        $this->adminPermission->deleteAdminPermission($id);
+        \App\Logic\Admin\AdminPermissionLogic::deleteAdminPermission($id);
 
         return response_json();
     }

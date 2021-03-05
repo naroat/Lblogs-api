@@ -23,4 +23,6 @@ class AdminPermissionMenuGroupModel extends Model
         'id' => 'string',   //把id返回字符串
     ];
 
+    protected $hidden = ['is_on'];
+
 }
