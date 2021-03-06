@@ -3,9 +3,10 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FormModel extends Model
+
+class FormElementModel extends Model
 {
-    protected $table = 'form';
+    protected $table = 'form_element';
 
     //定义为秒时间戳
     protected $dateFormat = 'U';
@@ -19,9 +20,4 @@ class FormModel extends Model
     ];
 
     protected $hidden = ['is_on'];
-
-    public function formElements()
-    {
-        return $this->hasMany(FormElementModel::class, 'form_id', 'id')->orderBy('sort', 'asc');
-    }
 }
