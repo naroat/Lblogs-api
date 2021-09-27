@@ -16,3 +16,6 @@ yarn-error.log
 /storage/temp
 /public/temp
 /storage/multiupload
+.idea/*
+.idea/
+.idea

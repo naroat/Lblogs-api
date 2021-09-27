@@ -15,7 +15,6 @@
         "laravel/horizon": "^3.6",
         "laravel/telescope": "^2.1",
         "laravel/tinker": "^2.0",
-        "lcobucci/jwt": "^3.3",
         "taoran/laravel-util": "^1.2"
     },
     "require-dev": {

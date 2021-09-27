@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Exceptions\ApiException;
+use Taoran\Laravel\Exception\ApiException;
 use Closure;
 
 class AdminAuth
@@ -16,10 +16,24 @@ class AdminAuth
      */
     public function handle($request, Closure $next)
     {
-        //管理员身份验证
-        $admin_user = session('admin_user');
-        if (!isset($admin_user) || empty($admin_user['admin_id'])) {
-            throw new \Taoran\Laravel\Exception\ApiException('请先登录');
+        if (config('app.debug') === true && $request->query->get('usertest') && $request->query->get('usertest') > 0) {
+            $role = [];
+            $role_info = \App\Model\AdminUserModel::find($request->query->get('usertest'))->roles()->get(['admin_role_id', 'name']);
+
+            if(!$role_info ->isEmpty()){
+                foreach ($role_info as $v) {
+                    $role[]=$v->admin_role_id;
+                }
+            }
+
+            \Jwt::set('admin_info', array(
+                'admin_id' => $request->query->get('usertest'),
+                'role' => $role
+            ));
+        }
+
+        if (!(!empty(\Jwt::get('admin_info')) && !empty(\Jwt::get('admin_info.admin_id')))) {
+            throw new ApiException('你还没有登录或登录已过期', 'NO LOGIN');
         }
 
         return $next($request);

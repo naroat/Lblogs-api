@@ -12,11 +12,14 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+//登录
 Route::post('logins', 'Admin\LoginController@login');
+//注销
 Route::delete('logouts', 'Admin\LoginController@logout');
-//获取菜单
-Route::get('get/menus', 'Admin\AdminMenuAvailableController@index');
+
 Route::group(['middleware' => ['AdminAuth']], function () {
+    //获取菜单
+    Route::get('get/menus', 'Admin\AdminMenuAvailableController@index');
     //栏目管理
     Route::resource('menu/groups', 'Admin\AdminMenuGroupController');
     //菜单管理
