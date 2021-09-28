@@ -18,19 +18,17 @@ class LoginController extends Controller
             'account' => 'required',
             'password' => 'required'
         ]);
-
         //验证失败
         if ($validator->fails()) throw new ApiException($validator->errors()->first());
 
         $data = \App\Logic\Admin\LoginLogic::login($request->all());
-        $data['token'] = 'admin_token';
-        return response_json($data, 200);
+        return response_json($data);
     }
 
     //注销
     public function logout(Request $request)
     {
-        session()->forget('admin_user');
+        \Cache::forget('token:'. request()->input('token'));
 
         return response_json();
     }

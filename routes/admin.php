@@ -12,12 +12,14 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 //登录
 Route::post('logins', 'Admin\LoginController@login');
-//注销
-Route::delete('logouts', 'Admin\LoginController@logout');
 
 Route::group(['middleware' => ['AdminAuth']], function () {
+    //注销
+    Route::delete('logouts', 'Admin\LoginController@logout');
+
     //获取菜单
     Route::get('get/menus', 'Admin\AdminMenuAvailableController@index');
     //栏目管理
@@ -50,8 +52,6 @@ Route::group(['middleware' => ['AdminAuth']], function () {
     //系统设置
 //    Route::get('configs', 'Admin\ConfigController');
 //    Route::put('configs/{id}', 'Admin\ConfigController');
-    //关于我们 - 查看
-
-    //关于我们 - 编辑
 
 });
+

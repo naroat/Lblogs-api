@@ -14,8 +14,10 @@ use Illuminate\Http\Request;
 */
 //Route::any('test', 'Api\TestController@index');
 
+Route::any('test', 'Api\TestController@index');
+Route::any('test2', 'Api\TestController@test2');
 Route::group(['middleware' => ['JwtAuth']], function () {
-    Route::any('test', 'Api\TestController@index');
+
 });
 
 Route::post('upload', 'Api\UploadController@upload');
