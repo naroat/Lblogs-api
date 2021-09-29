@@ -1,6 +1,7 @@
 <?php
 namespace App\Logic\Admin;
 
+use App\Logic\Common\TokenLogic;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Cache;
@@ -11,6 +12,46 @@ use Taoran\Laravel\Exception\ApiException;
 class LoginLogic
 {
     public static function login($data)
+    {
+        //登录验证
+        $admin_user = self::auth($data, $role, $role_name);
+
+        //生成token
+        $encode_data = [
+            'admin_id' => $admin_user->id,
+            'admin_name' => $admin_user->account,
+            'roles' => $role_name,
+        ];
+
+        //过期时间
+        $expires_time = 60;
+        $time = time();
+        $encode_data['expires_time'] = $time + ($expires_time * 60);
+        $encode_data['refresh_time'] = $time;
+
+        $admin_user->token = JWT::encode($encode_data, config('app.key'));
+        $save_res = $admin_user->save();
+        if (!$save_res) {
+            throw new ApiException("数据库错误!");
+        }
+
+        TokenLogic::set($admin_user->token, $encode_data, $encode_data['expires_time']);
+        return [
+            'admin_id' => $admin_user->id,
+            'admin_name' => $admin_user->account,
+            'roles' => $role_name,
+            'token' => $admin_user->token
+        ];;
+    }
+
+    /**
+     * 登录验证
+     *
+     * @param $data
+     * @return mixed
+     * @throws ApiException
+     */
+    public static function auth($data, &$role, &$role_name)
     {
         $admin_user = \App\Model\AdminUserModel::select(['id', 'account', 'password', 'salt', 'token'])
             ->where('account', $data['account'])
@@ -35,34 +76,6 @@ class LoginLogic
             trim($role_name, ',');
         }
 
-        //生成token
-        $encode_data = [
-            'admin_id' => $admin_user->id,
-            'admin_name' => $admin_user->account,
-            'roles' => $role_name,
-        ];
-
-        //过期时间
-        $expires_time = 60;
-        $time = time();
-        $encode_data['expires_time'] = $time + ($expires_time * 60);
-        $encode_data['refresh_time'] = $time;
-
-        $admin_user->token = JWT::encode($encode_data, config('app.key'));
-        $save_res = $admin_user->save();
-        if (!$save_res) {
-            throw new ApiException("数据库错误!");
-        }
-
-        //保存token
-        $sessionPrefix = "token:admin";
-        \Cache::put($sessionPrefix . ':' . $admin_user->token, $encode_data, Carbon::now()->addMinutes($expires_time));
-
-        return [
-            'admin_id' => $admin_user->id,
-            'admin_name' => $admin_user->account,
-            'roles' => $role_name,
-            'token' => $admin_user->token
-        ];;
+        return $admin_user;
     }
 }
