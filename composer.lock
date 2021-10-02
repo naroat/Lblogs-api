@@ -6203,16 +6203,16 @@
         },
         {
             "name": "taoran/laravel-util",
-            "version": "v1.2.4",
+            "version": "v1.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/taoran1401/laravel-util.git",
-                "reference": "c84d4081cc9dd9a6390942cd2e3d8dce46a0f856"
+                "reference": "70d52f76e9d44a820dc362e17d71553357418344"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/taoran1401/laravel-util/zipball/c84d4081cc9dd9a6390942cd2e3d8dce46a0f856",
-                "reference": "c84d4081cc9dd9a6390942cd2e3d8dce46a0f856",
+                "url": "https://api.github.com/repos/taoran1401/laravel-util/zipball/70d52f76e9d44a820dc362e17d71553357418344",
+                "reference": "70d52f76e9d44a820dc362e17d71553357418344",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -6265,9 +6265,9 @@
             ],
             "support": {
                 "issues": "https://github.com/taoran1401/laravel-util/issues",
-                "source": "https://github.com/taoran1401/laravel-util/tree/v1.2.4"
+                "source": "https://github.com/taoran1401/laravel-util/tree/v1.2.5"
             },
-            "time": "2021-09-27T08:49:57+00:00"
+            "time": "2021-10-01T16:03:50+00:00"
         },
         {
             "name": "theseer/tokenizer",

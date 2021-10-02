@@ -15,10 +15,10 @@ use Illuminate\Http\Request;
 
 //登录
 Route::post('logins', 'Admin\LoginController@login');
+//注销
+Route::delete('logouts', 'Admin\LoginController@logout');
 
 Route::group(['middleware' => ['AdminAuth']], function () {
-    //注销
-    Route::delete('logouts', 'Admin\LoginController@logout');
 
     //获取菜单
     Route::get('get/menus', 'Admin\AdminMenuAvailableController@index');

@@ -12,6 +12,8 @@ class TestController extends Controller
 {
     public function index()
     {
+        dd(config('app.timezone'));
+        dd(get_msectime());
         $token = JWT::encode([
             'user' => 'taoarn',
             'age' => '28',

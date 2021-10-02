@@ -26,6 +26,7 @@ class AdminUserLogic
             $list->where('phone', $data['phone']);
         }
 
+
         //筛选创建时间
         if (isset($data['start_time']) && isset($data['end_time'])) {
             if ($data['start_time'] > $data['end_time']) {
@@ -34,7 +35,6 @@ class AdminUserLogic
 
             $list->whereBetween('created_at', [$data['start_time'], $data['end_time']]);
         }
-
         $list = $list->paginate();
 
         $admin_id = session('admin_info.admin_id');

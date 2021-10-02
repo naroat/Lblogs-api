@@ -14,14 +14,14 @@ class LoginController extends Controller
     //登录
     public function login(Request $request)
     {
-        $validator = Validator::make($request->post(), [
+        $validator = Validator::make($request->request->all(), [
             'account' => 'required',
             'password' => 'required'
         ]);
         //验证失败
         if ($validator->fails()) throw new ApiException($validator->errors()->first());
 
-        $data = \App\Logic\Admin\LoginLogic::login($request->all());
+        $data = \App\Logic\Admin\LoginLogic::login($validator->validate());
         return response_json($data);
     }
 
