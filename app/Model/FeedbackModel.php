@@ -5,21 +5,16 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
 
-class ArticleModel extends Model
+class FeedbackModel extends Model
 {
-    protected $table = 'article';
+    protected $table = 'feedback';
 
     protected $dateFormat = 'Uv';
 
     protected $hidden = ['is_on'];
 
     protected $casts = [
-        'is_show' => 'string'
-    ];
-
-    const IS_SHOW = [
-        0 => '隐藏',
-        1 => '显示',
+        'id' => 'string'
     ];
 
     //没有该方法会导致读取出来的时间戳和数据库不同，前台显示的时间就会错误

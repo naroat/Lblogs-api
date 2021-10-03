@@ -20,7 +20,9 @@ Route::group(['middleware' => ['JwtAuth']], function () {
 
 });
 
-Route::post('upload', 'Api\UploadController@upload');
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//获取文章列表
+Route::get('articles', 'Api\ArticleController@index');
+Route::get('articles/{id}', 'Api\ArticleController@show');
+//添加留言
+Route::post('feedbacks', 'Api\FeedbackController@store');
+
