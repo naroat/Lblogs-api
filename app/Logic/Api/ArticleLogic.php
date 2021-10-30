@@ -67,7 +67,7 @@ class ArticleLogic
      */
     public static function getOne($id)
     {
-        $data = \App\Model\ArticleModel::select(['id', 'title', 'click_num', 'author', 'cover', 'tags', 'content', 'is_show', 'desc', 'created_at', 'updated_at'])
+        $data = \App\Model\ArticleModel::select(['id', 'title', 'click_num', 'author', 'cover', 'tags', 'content_html', 'is_show', 'desc', 'created_at', 'updated_at'])
             ->where('is_on', 1)
             ->where('is_show', 1)
             ->find($id);
@@ -79,6 +79,7 @@ class ArticleLogic
         $data->tags = explode(',', $data->tags);
         $data->cover = 'https://baseran2.oss-cn-shenzhen.aliyuncs.com/default/style/bishi.jpg';
         $data->format_updated_at = get_msec_to_mescdate($data->updated_at);
+        $data->content_html = htmlspecialchars_decode($data->content_html);
 
         return $data;
     }

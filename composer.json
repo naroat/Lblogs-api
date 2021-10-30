@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2",
         "aliyuncs/oss-sdk-php": "^2.4",
+        "erusev/parsedown": "^1.7",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.2",
         "laravel/horizon": "^3.6",

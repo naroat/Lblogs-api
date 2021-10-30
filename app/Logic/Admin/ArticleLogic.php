@@ -88,6 +88,7 @@ class ArticleLogic
         }
 
         $data->tags = explode(',', $data->tags);
+        $data->content = htmlspecialchars_decode($data->content);
 
         return $data;
     }
@@ -105,6 +106,7 @@ class ArticleLogic
             $data['tags'] = trim(implode(',', $data['tags']), ',');
         }
         $article_model = new \App\Model\ArticleModel();
+        $data['content_html'] = self::markdownToHtml($data['content']);
         unset($data['token']);
         set_save_data($article_model, $data);
         $res = $article_model->save();
@@ -137,7 +139,7 @@ class ArticleLogic
         }
 
         \DB::beginTransaction();
-
+        $data['content_html'] = self::markdownToHtml($data['content']);
         //更新主表
         set_save_data($res, $data);
         $update = $res->save();
@@ -181,6 +183,30 @@ class ArticleLogic
         \DB::commit();
 
         return true;
+    }
+
+    /**
+     * markdown to html
+     *
+     * @param $markdown
+     * @return mixed
+     */
+    public static function markdownToHtml($markdown)
+    {
+        // markdown to html
+        $convertedHmtl = app('Parsedown')->setBreaksEnabled(true)->text($markdown);
+
+        /** XSS 防注入 */
+        $convertedHmtl = htmlspecialchars($convertedHmtl);
+
+        // 代码高亮展示优化
+        $convertedHmtl = str_replace("<pre><code>", '<pre><code class=" language-php">', $convertedHmtl);
+
+        // 移除 {{}}
+        // $convertedHmtl = remove_vue($convertedHmtl);
+
+        // 返回 html
+        return $convertedHmtl;
     }
 
 }
