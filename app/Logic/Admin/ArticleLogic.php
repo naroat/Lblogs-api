@@ -196,9 +196,6 @@ class ArticleLogic
         // markdown to html
         $convertedHmtl = app('Parsedown')->setBreaksEnabled(true)->text($markdown);
 
-        /** XSS 防注入 */
-        $convertedHmtl = htmlspecialchars($convertedHmtl);
-
         // 代码高亮展示优化
         $convertedHmtl = str_replace("<pre><code>", '<pre><code class=" language-php">', $convertedHmtl);
 
