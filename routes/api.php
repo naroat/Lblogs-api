@@ -25,4 +25,6 @@ Route::get('articles', 'Api\ArticleController@index');
 Route::get('articles/{id}', 'Api\ArticleController@show');
 //添加留言
 Route::post('feedbacks', 'Api\FeedbackController@store');
+//获取导航
+Route::get('navs', 'Api\NavController@index');
 

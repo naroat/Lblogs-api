@@ -53,5 +53,9 @@ Route::group(['middleware' => ['AdminAuth']], function () {
 //    Route::get('configs', 'Admin\ConfigController');
 //    Route::put('configs/{id}', 'Admin\ConfigController');
 
+    //导航分类管理
+    Route::resource('nav/categorys', 'Admin\NavCategoryController');
+    //导航管理
+    Route::resource('navs', 'Admin\NavController');
 });
 
