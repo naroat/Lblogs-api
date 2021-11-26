@@ -67,23 +67,24 @@ class ArticleLogic
      */
     public static function getOne($id)
     {
-        $data = \App\Model\ArticleModel::select(['id', 'title', 'click_num', 'author', 'cover', 'tags', 'content_html', 'is_show', 'desc', 'created_at', 'updated_at'])
+        $orm = \App\Model\ArticleModel::select(['id', 'title', 'click_num', 'author', 'cover', 'tags', 'content_html', 'is_show', 'desc', 'created_at', 'updated_at'])
             ->where('is_on', 1)
             ->where('is_show', 1)
-            ->find($id);
+            ->where('id', $id);
+        $data = $orm->first();
 
         if (!$data) {
             throw new ApiException("文章不存在！");
         }
+
+        //统计点击率
+        $orm->increment('click_num');
 
         $data->tags = explode(',', $data->tags);
         $data->cover = 'https://baseran2.oss-cn-shenzhen.aliyuncs.com/default/wz_temp.png';
         //$data->format_updated_at = get_msec_to_mescdate($data->updated_at);
         $data->content_html = htmlspecialchars_decode($data->content_html, ENT_QUOTES);
 
-        //统计点击率
-        $data->click_num = \DB::raw('click_num + 1');
-        $data->save();
 
         return $data;
     }
