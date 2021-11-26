@@ -76,14 +76,15 @@ class ArticleLogic
             throw new ApiException("文章不存在！");
         }
 
+        //统计点击率
+        $data->click_num = \DB::raw('click_num + 1');
+        $data->save();
+
         $data->tags = explode(',', $data->tags);
         $data->cover = 'https://baseran2.oss-cn-shenzhen.aliyuncs.com/default/wz_temp.png';
         //$data->format_updated_at = get_msec_to_mescdate($data->updated_at);
         $data->content_html = htmlspecialchars_decode($data->content_html, ENT_QUOTES);
 
-        //统计点击率
-        $data->click_num = \DB::raw('click_num + 1');
-        $data->save();
 
         return $data;
     }
