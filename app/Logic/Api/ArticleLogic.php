@@ -51,7 +51,7 @@ class ArticleLogic
         //重装数据
         $list->each(function ($item, $key) {
             $item->tags = explode(',', $item->tags);
-            $item->cover = 'https://baseran2.oss-cn-shenzhen.aliyuncs.com/default/style/bishi.jpg';
+            $item->cover = 'https://baseran2.oss-cn-shenzhen.aliyuncs.com/default/wz_temp.png';
             $item->format_updated_at = get_msec_to_mescdate($item->updated_at);
         });
 
@@ -77,9 +77,13 @@ class ArticleLogic
         }
 
         $data->tags = explode(',', $data->tags);
-        $data->cover = 'https://baseran2.oss-cn-shenzhen.aliyuncs.com/default/style/bishi.jpg';
-        $data->format_updated_at = get_msec_to_mescdate($data->updated_at);
-        $data->content_html = htmlspecialchars_decode($data->content_html);
+        $data->cover = 'https://baseran2.oss-cn-shenzhen.aliyuncs.com/default/wz_temp.png';
+        //$data->format_updated_at = get_msec_to_mescdate($data->updated_at);
+        $data->content_html = htmlspecialchars_decode($data->content_html, ENT_QUOTES);
+
+        //统计点击率
+        $data->click_num = \DB::raw('click_num + 1');
+        $data->save();
 
         return $data;
     }

@@ -88,7 +88,7 @@ class ArticleLogic
         }
 
         $data->tags = explode(',', $data->tags);
-        $data->content = htmlspecialchars_decode($data->content);
+        $data->content = htmlspecialchars_decode($data->content, ENT_QUOTES);
 
         return $data;
     }

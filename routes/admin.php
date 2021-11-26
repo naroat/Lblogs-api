@@ -22,6 +22,10 @@ Route::group(['middleware' => ['AdminAuth']], function () {
 
     //获取菜单
     Route::get('get/menus', 'Admin\AdminMenuAvailableController@index');
+
+    //base64上传
+    Route::post('uploads/base64', 'Admin\UploadController@uploadBase64');
+
     //栏目管理
     Route::resource('menu/groups', 'Admin\AdminMenuGroupController');
     //菜单管理
