@@ -14,7 +14,7 @@ class ArticleLogic
      */
     public static function getList($data)
     {
-        $list = \App\Model\ArticleModel::select(['id', 'title', 'click_num', 'author', 'cover', 'tags', 'cat_id', 'is_show', 'desc', 'created_at', 'updated_at'])
+        $list = \App\Model\ArticleModel::select(['id', 'title', 'content_html', 'click_num', 'author', 'cover', 'tags', 'cat_id', 'is_show', 'desc', 'created_at', 'updated_at'])
             ->where('is_on', 1)
             ->where('is_show', 1)
             ->orderBy('id', 'Desc');
@@ -52,6 +52,7 @@ class ArticleLogic
         $list->each(function ($item, $key) {
             $item->tags = explode(',', $item->tags);
             $item->cover = 'https://baseran2.oss-cn-shenzhen.aliyuncs.com/default/wz_temp.png';
+            $item->content_html = htmlspecialchars_decode($item->content_html, ENT_QUOTES);
             $item->format_updated_at = get_msec_to_mescdate($item->updated_at);
         });
 

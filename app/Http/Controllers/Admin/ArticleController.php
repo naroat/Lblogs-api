@@ -42,6 +42,7 @@ class ArticleController extends Controller
     {
         $validator = Validator::make(request()->request->all(), [
             'title' => 'required',
+            'cat_id' => 'required|int',
             'tags.*' => '',
             'is_show' => 'in:0,1|required',
             'content' => 'required',
@@ -80,6 +81,7 @@ class ArticleController extends Controller
     {
         $validator = Validator::make(request()->request->all(), [
             'title' => 'required',
+            'cat_id' => 'required|int',
             'tags.*' => '',
             'is_show' => 'in:0,1|required',
             'content' => 'required',

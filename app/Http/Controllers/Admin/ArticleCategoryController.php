@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Taoran\Laravel\Exception\ApiException;
 
 class ArticleCategoryController extends Controller
 {
@@ -13,7 +15,15 @@ class ArticleCategoryController extends Controller
      */
     public function index()
     {
-        $list = \App\Logic\Admin\ArticleCategoryLogic::getArticleCategoryList();
+        $validator = Validator::make(request()->query->all(), [
+            'name' => '',
+            'is_all' => '',
+        ]);
+
+        //验证失败
+        if ($validator->fails()) throw new ApiException($validator->errors()->first());
+
+        $list = \App\Logic\Admin\ArticleCategoryLogic::getArticleCategoryList($validator->validate());
 
         return response_json([], $list);
     }
@@ -27,14 +37,17 @@ class ArticleCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $this->verify([
-            'name' => '',
-            'parent_id' => 'no_required|egnum'
-        ], 'POST');
+        $validator = Validator::make(request()->request->all(), [
+            'name' => 'required',
+            'sort' => 'numeric',
+        ]);
 
-        \App\Logic\Admin\ArticleCategoryLogic::addArticleCategory($this->verifyData);
+        //验证失败
+        if ($validator->fails()) throw new ApiException($validator->errors()->first());
 
-        return $this->response();
+        \App\Logic\Admin\ArticleCategoryLogic::addArticleCategory($validator->validate());
+
+        return response_json();
     }
 
     /**
@@ -46,11 +59,10 @@ class ArticleCategoryController extends Controller
      */
     public function show($id)
     {
-        $this->verifyId($id);
 
         $data = \App\Logic\Admin\ArticleCategoryLogic::getOneArticleCategory($id);
 
-        return $this->response($data);
+        return response_json($data);
     }
 
     /**
@@ -63,14 +75,16 @@ class ArticleCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->verifyId($id);
-        $this->verify([
-            'name' => 'no_required'
-        ], 'POST');
+        $validator = Validator::make(request()->request->all(), [
+            'name' => 'required',
+            'sort' => 'numeric',
+        ]);
+        //验证失败
+        if ($validator->fails()) throw new ApiException($validator->errors()->first());
 
-        \App\Logic\Admin\ArticleCategoryLogic::updateArticleCategory($this->verifyData, $id);
+        \App\Logic\Admin\ArticleCategoryLogic::updateArticleCategory($validator->validate(), $id);
 
-        return $this->response();
+        return response_json();
     }
 
     /**
@@ -82,10 +96,9 @@ class ArticleCategoryController extends Controller
      */
     public function destroy($id)
     {
-        $this->verifyId($id);
 
         \App\Logic\Admin\ArticleCategoryLogic::deleteArticleCategory($id);
 
-        return $this->response();
+        return response_json();
     }
 }
