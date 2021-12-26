@@ -89,4 +89,43 @@ class ArticleLogic
 
         return $data;
     }
+
+    /**
+     * 归档
+     */
+    public static function Archive()
+    {
+        $list = \App\Model\ArticleModel::select(['id', 'title', 'created_at', 'updated_at'])
+            ->where('is_on', 1)
+            ->where('is_show', 1)
+            ->orderBy('created_at', 'DESC');
+
+        //筛选作者
+        /*if (isset($data['author'])) {
+            $list->where('author', $data['author']);
+        }*/
+
+
+        $list = $list->get();
+
+        //重装数据
+        $group_list = [];
+        $list->each(function ($item, $key) use (&$group_list) {
+            $year = get_msec_to_mescdate($item->created_at, "Y");
+            $item->created_at_format = get_msec_to_mescdate($item->created_at, 'Y/m/d');
+            $group_list[$year][] = $item;
+        });
+
+        //组合数据方便前端使用
+        $group_list_full = [];
+        foreach ($group_list as $key => $val) {
+            $group_list_full[] = [
+                'year' => $key,
+                'list' => $group_list[$key]
+            ];
+        }
+
+        return $group_list_full;
+    }
+
 }

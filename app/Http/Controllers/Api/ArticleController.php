@@ -9,7 +9,8 @@ use Taoran\Laravel\Exception\ApiException;
 
 class ArticleController extends Controller
 {
-    public function index() {
+    public function index()
+    {
 
         $validator = Validator::make(request()->query->all(), [
             'title' => ''
@@ -23,10 +24,21 @@ class ArticleController extends Controller
         return response_json([], $list);
     }
 
-    public function show($id) {
+    public function show($id)
+    {
 
         $data = \App\Logic\Api\ArticleLogic::getOne($id);
 
         return response_json($data);
+    }
+
+    /**
+     * 归档
+     */
+    public function Archive()
+    {
+        $list = \App\Logic\Api\ArticleLogic::Archive();
+
+        return response_json([], $list);
     }
 }

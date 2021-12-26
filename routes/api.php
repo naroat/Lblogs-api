@@ -22,7 +22,10 @@ Route::group(['middleware' => ['JwtAuth']], function () {
 
 //获取文章列表
 Route::get('articles', 'Api\ArticleController@index');
+//获取文章列表详情
 Route::get('articles/{id}', 'Api\ArticleController@show');
+//获取文章归档
+Route::get('article/archives', 'Api\ArticleController@Archive');
 //添加留言
 Route::post('feedbacks', 'Api\FeedbackController@store');
 //获取导航
