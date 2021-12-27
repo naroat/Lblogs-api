@@ -30,4 +30,6 @@ Route::get('article/archives', 'Api\ArticleController@Archive');
 Route::post('feedbacks', 'Api\FeedbackController@store');
 //获取导航
 Route::get('navs', 'Api\NavController@index');
+//记录用户访问日志
+Route::post('log/user/visits', 'Api\LogUserVisitController@store');
 
