@@ -1,1 +1,1 @@
-基于Laravel的博客Api
+基于Laravel6的博客Api
